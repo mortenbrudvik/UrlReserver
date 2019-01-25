@@ -12,10 +12,15 @@ namespace UrlReserverConsole
             var status = urlReserver.Reserve(address, "everyone");
             Console.Out.WriteLine($"Trying to register \"{address}\" - { status }");
 
+            status = urlReserver.Reserve(address, "everyone");
+            Console.Out.WriteLine($"Trying to register twice \"{address}\" - { status }");
+
             // netsh http delete urlacl url=http://+9000/
+            status = urlReserver.UnReserve(address);
+            Console.Out.WriteLine($"Trying to un-register \"{address}\" - { status }");
 
-            // netsh http show urlacl url=http://+9000/
-
+            status = urlReserver.UnReserve(address);
+            Console.Out.WriteLine($"Trying to un-register twice \"{address}\" - { status }");
         }
     }
 

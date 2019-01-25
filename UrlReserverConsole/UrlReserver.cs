@@ -8,6 +8,7 @@ namespace UrlReserverConsole
         {
             Reserve(address, $@"{domain}\{user}");
         }
+
         public bool Reserve(string address, string user)
         {
             var args = $@"http add urlacl url={address} user={user}";
@@ -22,11 +23,32 @@ namespace UrlReserverConsole
             };
 
             var process = Process.Start(psi);
-            var output = process.StandardOutput.ReadToEnd();
+            var output = process?.StandardOutput.ReadToEnd() ?? "";
                 
             process?.WaitForExit();
 
             return output.Contains("URL reservation successfully added");
+        }
+
+        public bool UnReserve(string address)
+        {
+            var args = $@"http delete urlacl url={address}";
+
+            var psi = new ProcessStartInfo("netsh", args)
+            {
+                Verb = "runas",
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+
+            var process = Process.Start(psi);
+            var output = process?.StandardOutput.ReadToEnd() ?? "";
+
+            process?.WaitForExit();
+
+            return output.Contains("URL reservation successfully deleted");
         }
     }
 }
